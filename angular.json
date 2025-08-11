@@ -3,5 +3,92 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
+    "primeng-table": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/primeng-table",
+      "sourceRoot": "projects/primeng-table/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "projects/primeng-table/src/main.ts",
+            "tsConfig": "projects/primeng-table/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/primeng-table/public"
+              }
+            ],
+            "styles": [
+              "projects/primeng-table/src/styles.scss"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "primeng-table:build:production"
+            },
+            "development": {
+              "buildTarget": "primeng-table:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/primeng-table/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/primeng-table/public"
+              }
+            ],
+            "styles": [
+              "projects/primeng-table/src/styles.scss"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": "c95d296e-cb22-4978-983d-c6ca8b419947"
   }
 }
