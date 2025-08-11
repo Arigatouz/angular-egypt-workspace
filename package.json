@@ -43,14 +43,8 @@
     "typescript-eslint": "8.34.1"
   },
   "lint-staged": {
-    "*.{ts,js}": [
-      "ng lint --fix",
-      "git add"
-    ],
-    "*.{html,scss,css}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{ts,js,html}": "eslint --cache --max-warnings=0 --fix",
+    "*.{scss,css}": "prettier --write"
   }
 
 }
