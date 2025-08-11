@@ -84,11 +84,24 @@
               "projects/primeng-table/src/styles.scss"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/primeng-table/**/*.ts",
+              "projects/primeng-table/**/*.html"
+            ],
+            "eslintConfig": "projects/primeng-table/eslint.config.js"
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "c95d296e-cb22-4978-983d-c6ca8b419947"
+    "analytics": "c95d296e-cb22-4978-983d-c6ca8b419947",
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   }
 }
