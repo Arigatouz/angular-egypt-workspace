@@ -1,0 +1,6 @@
+::ng-deep .p-button {
+  &.dimensions-40 {
+    --p-button-icon-only-width: 40px;
+    --p-button-icon-only-height: 40px;
+  }
+}

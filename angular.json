@@ -8,6 +8,15 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@schematics/angular:pipe": {
+          "flat": false
+        },
+        "@schematics/angular:service": {
+          "flat": false
+        },
+        "@schematics/angular:directive": {
+          "flat": false
         }
       },
       "root": "projects/primeng-table",
@@ -27,7 +36,7 @@
               }
             ],
             "styles": [
-              "projects/primeng-table/src/styles.scss"
+              "projects/primeng-table/src/styles.css"
             ]
           },
           "configurations": {
@@ -49,7 +58,13 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/primeng-table/src/environments/environment.ts",
+                  "with": "projects/primeng-table/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
