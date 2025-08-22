@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "prepare": "husky install",
-    "dev:table":"ng serve --project=primeng-table"
+    "dev:table": "ng serve --project=primeng-table",
+    "dev:full": "concurrently \"cd projects/server && npm run dev\" \"ng serve --project=primeng-table\" --names \"backend,frontend\" --prefix-colors \"blue,green\""
   },
   "private": true,
   "dependencies": {
@@ -30,6 +31,7 @@
     "@angular/compiler-cli": "^20.0.0",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.1.1",
+    "concurrently": "^9.2.0",
     "eslint": "^9.29.0",
     "husky": "^9.1.7",
     "jasmine-core": "~5.7.0",
@@ -46,5 +48,4 @@
     "*.{ts,js,html}": "eslint --cache --max-warnings=0 --fix",
     "*.{scss,css}": "prettier --write"
   }
-
 }
