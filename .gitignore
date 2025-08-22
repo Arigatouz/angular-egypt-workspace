@@ -43,3 +43,7 @@ Thumbs.db
 
 # windsurf
 .windsurf
+
+# Claude
+/.claude
+.claude
