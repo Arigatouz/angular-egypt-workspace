@@ -18,7 +18,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { NgTemplateOutlet } from '@angular/common';
 import { Table, TableFilterEvent, TableModule, TablePageEvent } from 'primeng/table';
 
-import { TableColumn } from '../../interfaces';
+import { TableColumn } from '../../interfaces/table';
 
 @Component({
   selector: 'app-table',

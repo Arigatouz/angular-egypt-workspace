@@ -5,9 +5,7 @@
       [pageNumber]="pageNumber()" [pageSize]="pageSize()" (pageNumberChange)="pageNumber.set($event);"
       (pageSizeChange)="pageSize.set($event);" (sortChange)="sortChange($event);" (filterChange)="filterChange($event);">
       <ng-template #pTableRowAction let-row>
-        <div class="flex items-center gap-2">
-          <p-button styleClass="dimensions-40" icon="pi pi-eye" severity="secondary" rounded />
-        </div>
+        <p-button styleClass="dimensions-40" icon="pi pi-eye" severity="secondary" rounded />
       </ng-template>
     </app-table>
   </div>

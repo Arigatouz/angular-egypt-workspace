@@ -2,10 +2,11 @@ import { SortMeta } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Component, computed, effect, inject, Injector, runInInjectionContext, signal } from '@angular/core';
 
-import { Product } from '../../interfaces';
-import { ProductsService } from '../../services';
+import { Product } from '../../interfaces/product';
+import { ProductsService } from '../../services/products/products';
 
-import { TableComponent, TableColumn } from 'src/app/shared';
+import { TableColumn } from 'src/app/shared/interfaces/table';
+import { TableComponent } from 'src/app/shared/components/table/table';
 
 const sortConfig = {
   '1': 'asc',
@@ -24,7 +25,7 @@ export class Products {
   readonly #productsService = inject(ProductsService);
 
   readonly pageSize = signal(10);
-  readonly pageNumber = signal(1);
+  readonly pageNumber = signal(0);
   readonly totalCount = signal(0);
 
   readonly sort = signal('');
@@ -63,7 +64,7 @@ export class Products {
     order: this.order(),
   }));
 
-  tableRows = this.#productsService.getAll(() => ({ params: this.tableFilterPayload() }));
+  tableRows = this.#productsService.getAll(this.tableFilterPayload);
   _rows!: Product[];
 
   constructor() {
@@ -88,8 +89,15 @@ export class Products {
 
   filterChange(event: { global: string } | null) {
     runInInjectionContext(this.#injector, () => {
-      if (!event) this.tableRows = this.#productsService.getAll(() => ({ params: this.tableFilterPayload() }));
-      else this.tableRows = this.#productsService.search(() => ({ params: { q: event.global } }));
+      if (!event) {
+        this.pageSize.set(10);
+        this.pageNumber.set(0);
+        this.tableRows.destroy();
+        this.tableRows = this.#productsService.getAll(this.tableFilterPayload);
+      } else {
+        this.tableRows.destroy();
+        this.tableRows = this.#productsService.search(signal({ q: event.global }));
+      }
     });
   }
 }

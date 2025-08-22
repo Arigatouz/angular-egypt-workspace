@@ -1,9 +1,9 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpResourceRequest } from '@angular/common/http';
+import { inject, Injectable, Signal } from '@angular/core';
 
-import { Product } from '../../interfaces';
+import { Product } from '../../interfaces/product';
 
-import { HttpService } from 'src/app/core';
+import { HttpService } from 'src/app/core/services/http/http';
 
 type URLConfig = Pick<HttpResourceRequest, 'url'>;
 
@@ -17,17 +17,17 @@ export class ProductsService {
     url: 'products',
   };
 
-  getAll(HttpConfig: () => Omit<HttpResourceRequest, 'url'>) {
-    return this.#httpService.get<Product[]>(() => ({
-      ...HttpConfig(),
+  getAll(params: Signal<HttpResourceRequest['params']>) {
+    return this.#httpService.get<Product[]>({
       url: this.#config.url,
-    }));
+      params,
+    });
   }
 
-  search(HttpConfig: () => Omit<HttpResourceRequest, 'url'>) {
-    return this.#httpService.get<Product[]>(() => ({
-      ...HttpConfig(),
+  search(params: Signal<HttpResourceRequest['params']>) {
+    return this.#httpService.get<Product[]>({
       url: `${this.#config.url}/search`,
-    }));
+      params,
+    });
   }
 }

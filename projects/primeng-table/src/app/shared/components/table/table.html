@@ -7,7 +7,7 @@
     tableStyleClass="table-auto" columnResizeMode="expand" resizableColumns showGridlines rowHover>
     <ng-template #caption>
       <div class="flex">
-        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash"
+        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" [disabled]="!filterInput.value"
           (click)="clearFilter(); filterInput.value = ''" />
 
         <p-iconfield iconPosition="left" class="ml-auto">
