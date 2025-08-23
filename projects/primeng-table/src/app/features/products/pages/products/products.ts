@@ -1,11 +1,12 @@
 import { SortMeta } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { Component, computed, effect, inject, Injector, runInInjectionContext, signal } from '@angular/core';
+import { Component, computed, inject, Injector, linkedSignal, runInInjectionContext, signal } from '@angular/core';
 
 import { Product } from '../../interfaces/product';
 import { ProductsService } from '../../services/products/products';
 
 import { TableColumn } from 'src/app/shared/interfaces/table';
+import { APIResponse } from 'src/app/core/interfaces/response';
 import { TableComponent } from 'src/app/shared/components/table/table';
 
 const sortConfig = {
@@ -64,17 +65,16 @@ export class Products {
     order: this.order(),
   }));
 
-  tableRows = this.#productsService.getAll(this.tableFilterPayload);
-  _rows!: Product[];
+  tableDataAsResource = this.#productsService.getAll(this.tableFilterPayload);
+  productsData = linkedSignal<APIResponse<Product[]> | undefined, APIResponse<Product[]> | undefined>({
+    source: () => this.tableDataAsResource.value() as APIResponse<Product[]>,
+    computation: (newVal, oldVal) => {
+      if (!oldVal) return;
+      if (!newVal) return oldVal.value;
 
-  constructor() {
-    effect(() => {
-      if (this.tableRows.hasValue()) {
-        this.totalCount.set(this.tableRows.value().total);
-        this._rows = this.tableRows.value().products;
-      }
-    });
-  }
+      return newVal;
+    },
+  });
 
   sortChange(event: SortMeta[] | SortMeta) {
     if (Array.isArray(event)) {
@@ -89,14 +89,14 @@ export class Products {
 
   filterChange(event: { global: string } | null) {
     runInInjectionContext(this.#injector, () => {
-      if (!event) {
+      if (event) {
+        this.tableDataAsResource.destroy();
+        this.tableDataAsResource = this.#productsService.search(signal({ q: event.global }));
+      } else {
         this.pageSize.set(10);
         this.pageNumber.set(0);
-        this.tableRows.destroy();
-        this.tableRows = this.#productsService.getAll(this.tableFilterPayload);
-      } else {
-        this.tableRows.destroy();
-        this.tableRows = this.#productsService.search(signal({ q: event.global }));
+        this.tableDataAsResource.destroy();
+        this.tableDataAsResource = this.#productsService.getAll(this.tableFilterPayload);
       }
     });
   }

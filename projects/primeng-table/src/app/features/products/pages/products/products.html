@@ -1,12 +1,15 @@
 <div class="w-full h-full min-h-fit-content flex justify-center pt-10">
   <div class="w-[75%] max-w-[75%] flex justify-center">
-    <app-table [columns]="pageTableColumns()" [rows]="tableRows.hasValue() ? tableRows.value().products : _rows"
-      [totalCount]="tableRows.hasValue() ? tableRows.value().total : totalCount()!" [loading]="tableRows.isLoading()"
-      [pageNumber]="pageNumber()" [pageSize]="pageSize()" (pageNumberChange)="pageNumber.set($event);"
-      (pageSizeChange)="pageSize.set($event);" (sortChange)="sortChange($event);" (filterChange)="filterChange($event);">
+    @let tableData = productsData();
+    @if (tableData) {
+    <app-table [columns]="pageTableColumns()" [rows]="tableData.products" [loading]="tableDataAsResource.isLoading()"
+      [totalCount]="tableData.total" [pageNumber]="pageNumber()" [pageSize]="pageSize()"
+      (pageNumberChange)="pageNumber.set($event);" (pageSizeChange)="pageSize.set($event);"
+      (sortChange)="sortChange($event);" (filterChange)="filterChange($event);">
       <ng-template #pTableRowAction let-row>
         <p-button styleClass="dimensions-40" icon="pi pi-eye" severity="secondary" rounded />
       </ng-template>
     </app-table>
+    }
   </div>
 </div>
