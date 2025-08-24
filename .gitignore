@@ -43,6 +43,12 @@ Thumbs.db
 .angular
 /.angular
 /.vscode
+.vscode/extensions.json
+./.vscode/extensions.json
+./.vscode/tasks.json
+./.vscode/launch.json
+./.vscode/settings.json
+
 .vscode
 /.claude
 .claude
