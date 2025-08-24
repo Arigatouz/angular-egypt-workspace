@@ -18,7 +18,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { NgTemplateOutlet } from '@angular/common';
 import { Table, TableFilterEvent, TableModule, TablePageEvent } from 'primeng/table';
 
-import { TableColumn } from '../../interfaces/table';
+import { ITableColumn } from '../../interfaces/table';
 
 @Component({
   selector: 'app-table',
@@ -28,21 +28,21 @@ import { TableColumn } from '../../interfaces/table';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class TableComponent {
-  rows = input.required<unknown[], unknown[]>({
+export class TableComponent<T> {
+  rows = input.required<T[], T[]>({
     transform: (rows) => {
       if (!this.withIndex() || !rows) return rows || [];
 
       return rows?.map((row, index) => ({
-        ...(row as object),
+        ...row,
         index: this.pageNumber() === 1 ? index + 1 : (this.pageNumber() - 1) * this.pageSize() + (index + 1),
       }));
     },
   });
 
-  columns = input.required<TableColumn[], TableColumn[]>({
+  columns = input.required<ITableColumn<T>[], ITableColumn<T>[]>({
     transform: (columns) => {
-      if (columns.find((column) => (column.rowPropertyName as string) === 'id') || !this.withIndex()) return columns;
+      if (columns.find((column) => column.rowPropertyName === 'id') || !this.withIndex()) return columns;
 
       return [
         {
@@ -141,14 +141,14 @@ export class TableComponent {
    * getEachColumnData(data, 'user.invalid.path'); // Returns undefined
    * ```
    */
-  getEachColumnData(row: unknown, rowPropertyName: TableColumn['rowPropertyName']) {
+  getEachColumnData(row: T, rowPropertyName: ITableColumn<T>['rowPropertyName']) {
     if (!row || !rowPropertyName) return undefined;
 
-    const keys = (rowPropertyName as string).split('.');
+    const keys = rowPropertyName.split('.');
     let value: unknown = row;
 
     for (const key of keys) {
-      if (value == null) return undefined;
+      if (!value) return undefined;
       value = value[key as keyof typeof value];
     }
 

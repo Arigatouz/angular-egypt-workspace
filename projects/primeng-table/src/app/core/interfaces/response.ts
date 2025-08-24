@@ -1,4 +1,4 @@
-export interface APIResponse<T> {
+export interface IPaginatedResponse<T> {
   products: T;
   skip: number;
   limit: number;

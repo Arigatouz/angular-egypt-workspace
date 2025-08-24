@@ -51,7 +51,7 @@
       <tr>
         @for (col of columns; track $index) {
         <td [class]="col.customCellClass ? col.customCellClass(rowData) : ''">
-          <span class="flex items-center truncate">
+          <span class="block truncate">
             {{ col.customCellFormatter ? col.customCellFormatter(rowData) : getEachColumnData(rowData,
             col.rowPropertyName) }}
           </span>

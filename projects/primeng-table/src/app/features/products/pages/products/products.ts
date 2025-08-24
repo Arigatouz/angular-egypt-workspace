@@ -2,11 +2,11 @@ import { SortMeta } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Component, computed, inject, Injector, linkedSignal, runInInjectionContext, signal } from '@angular/core';
 
-import { Product } from '../../interfaces/product';
+import { IProduct } from '../../interfaces/product';
 import { ProductsService } from '../../services/products/products';
 
-import { TableColumn } from 'src/app/shared/interfaces/table';
-import { APIResponse } from 'src/app/core/interfaces/response';
+import { ITableColumn } from 'src/app/shared/interfaces/table';
+import { IPaginatedResponse } from 'src/app/core/interfaces/response';
 import { TableComponent } from 'src/app/shared/components/table/table';
 
 const sortConfig = {
@@ -32,7 +32,7 @@ export class Products {
   readonly sort = signal('');
   readonly order = signal('');
 
-  pageTableColumns = signal<TableColumn<Product>[]>([
+  pageTableColumns = signal<ITableColumn<IProduct>[]>([
     {
       title: 'Title',
       rowPropertyName: 'title',
@@ -66,8 +66,8 @@ export class Products {
   }));
 
   tableDataAsResource = this.#productsService.getAll(this.tableFilterPayload);
-  productsData = linkedSignal<APIResponse<Product[]> | undefined, APIResponse<Product[]> | undefined>({
-    source: () => this.tableDataAsResource.value() as APIResponse<Product[]>,
+  productsData = linkedSignal<IPaginatedResponse<IProduct[]> | undefined, IPaginatedResponse<IProduct[]> | undefined>({
+    source: () => this.tableDataAsResource.value() as IPaginatedResponse<IProduct[]>,
     computation: (newVal, oldVal) => {
       if (!oldVal) return;
       if (!newVal) return oldVal.value;
