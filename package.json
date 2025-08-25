@@ -9,8 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
-    "prepare": "husky install",
-    "dev:table":"ng serve --project=primeng-table"
+    "prepare": "husky",
+    "dev:table": "ng serve -o --project=primeng-table"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +20,14 @@
     "@angular/forms": "^20.0.0",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "@primeuix/themes": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "postcss": "^8.5.6",
+    "primeicons": "^7.0.0",
+    "primeng": "^20.0.1",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.1.11",
+    "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
@@ -39,6 +46,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "lint-staged": "^16.1.5",
+    "prettier": "^3.6.2",
     "typescript": "~5.8.2",
     "typescript-eslint": "8.34.1"
   },
@@ -46,5 +54,4 @@
     "*.{ts,js,html}": "eslint --cache --max-warnings=0 --fix",
     "*.{scss,css}": "prettier --write"
   }
-
 }

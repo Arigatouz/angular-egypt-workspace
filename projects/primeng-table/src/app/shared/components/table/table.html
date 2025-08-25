@@ -1,0 +1,72 @@
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 p-6">
+  <p-table #dt [columns]="columns()" [value]="rows()" [paginator]="withPaginator() && rows().length"
+    [totalRecords]="totalCount()" [rows]="pageSize()" [first]="pageNumber()" [loading]="loading()" [lazy]="isLazy()"
+    [showCurrentPageReport]="true" [sortMode]="sortMode()" [rowsPerPageOptions]="rowsPerPageOptions()"
+    [globalFilterFields]="globalFilterFields()" [currentPageReportTemplate]="currentPageReportTemplate()"
+    (onPage)="pageChange($event)" (onSort)="onSort($event)" (onFilter)="onFilter($event)" dataKey="id"
+    tableStyleClass="table-auto" columnResizeMode="expand" resizableColumns showGridlines rowHover>
+    <ng-template #caption>
+      <div class="flex">
+        <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" [disabled]="!filterInput.value"
+          (click)="clearFilter(); filterInput.value = ''" />
+
+        <p-iconfield iconPosition="left" class="ml-auto">
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+
+          <input #filterInput pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search keyword" />
+        </p-iconfield>
+      </div>
+    </ng-template>
+
+    <ng-template #header let-columns>
+      <tr>
+        @for (col of columns; track $index) {
+        <th [pSortableColumn]="col.sortable && col.rowPropertyName" pResizableColumn
+          [pResizableColumnDisabled]="!col.resizable">
+          <div class="flex items-center gap-2">
+            {{ col.title }}
+
+            @if(col.sortable) {
+            <p-sortIcon [field]="col.rowPropertyName" />
+            }
+          </div>
+        </th>
+        }
+
+        <!-- Actions -->
+        @if(tableActionRef()) {
+        <th>
+          <div class="flex items-center gap-2">
+            Actions
+          </div>
+        </th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-rowData let-columns="columns">
+      <tr>
+        @for (col of columns; track $index) {
+        <td [class]="col.customCellClass ? col.customCellClass(rowData) : ''">
+          <span class="block truncate">
+            {{ col.customCellFormatter ? col.customCellFormatter(rowData) : getEachColumnData(rowData,
+            col.rowPropertyName) }}
+          </span>
+        </td>
+        }
+
+        <!-- Actions -->
+        @if(tableActionRef()) {
+        <td>
+          <div class="flex items-center gap-2">
+            <ng-container [ngTemplateOutlet]="tableActionRef()" [ngTemplateOutletContext]="{ $implicit: rowData }" />
+          </div>
+        </td>
+        }
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
