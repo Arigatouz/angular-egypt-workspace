@@ -40,12 +40,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-.angular
-/.angular
 
-.vscode
+# windsurf
+.windsurf
+
+# Claude
 /.claude
 .claude
+
 # compiled output
 /dist
 /node_modules
