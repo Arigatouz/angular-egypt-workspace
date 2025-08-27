@@ -11,7 +11,7 @@
     "lint:fix": "ng lint --fix",
     "prepare": "husky",
     "dev:table": "ng serve -o --project=primeng-table",
-    "dev:full": "concurrently \"cd projects/server && npm run dev\" \"ng serve --project=primeng-table\" --names \"backend,frontend\" --prefix-colors \"blue,green\""
+    "dev:full": "concurrently \"cd projects/server && npm run dev\" \"npm run dev:table\" --names \"backend,frontend\" --prefix-colors \"blue,green\""
   },
   "private": true,
   "dependencies": {
