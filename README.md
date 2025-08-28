@@ -1,59 +1,98 @@
-# /
+🏗️ Project Structure
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+- Location: projects/server/
+- NestJS Framework: Latest version with TypeScript
+- Database: PostgreSQL with TypeORM
+- Documentation: Swagger/OpenAPI integration
 
-## Development server
+🗄️ Database Schema
 
-To start a local development server, run:
+- Users Table: id, name, email, phone, bio, createdAt, updatedAt
+- Projects Table: id, name, description, status, startDate, endDate, userId, createdAt, updatedAt
+- Relationship: One User → Many Projects (Foreign Key)
 
-```bash
-ng serve
-```
+🚀 API Endpoints
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Users:
+- GET /users - Get all users with projects
+- GET /users/:id - Get specific user
+- POST /users - Create new user
+- PATCH /users/:id - Update user
+- DELETE /users/:id - Delete user
 
-## Code scaffolding
+Projects:
+- GET /projects - Get all projects with user info
+- GET /projects?userId=:id - Filter projects by user
+- GET /projects/:id - Get specific project
+- POST /projects - Create new project
+- PATCH /projects/:id - Update project
+- DELETE /projects/:id - Delete project
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🐳 Docker Configuration
 
-```bash
-ng generate component component-name
-```
+- PostgreSQL 16 container with persistent volumes
+- Health checks and automatic restart
+- Environment variables for database connection
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+📚 Swagger Documentation
 
-```bash
-ng generate --help
-```
+- Interactive API docs at http://localhost:3000/api/docs
+- Complete endpoint documentation with examples
+- Request/Response schemas with validation
 
-## Building
+✅ Angular Frontend Integration
 
-To build the project run:
+🎯 Test Component
 
-```bash
-ng build
-```
+- User Management Interface with full CRUD operations
+- Project Management with user relationships
+- Real-time API integration with error handling
+- Modern Angular 19 with standalone components
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+🎨 Features
 
-## Running unit tests
+- Form validation and error messaging
+- Responsive card-based layout
+- Status badges for project tracking
+- Confirmation dialogs for deletion
+- Loading indicators and empty states
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+✅ Development Setup
 
-```bash
-ng test
-```
+🛠️ Scripts Available
 
-## Running end-to-end tests
+# Full Stack Development (from root)
+npm run dev:full     # Start database + backend + frontend in parallel
 
-For end-to-end (e2e) testing, run:
+# Backend (projects/server/)
+npm run dev          # Start database + development server     
+npm run db:up        # Start PostgreSQL container
+npm run start:dev    # Development server with hot reload      
+npm run build        # Build production bundle
+npm run typecheck    # TypeScript validation
 
-```bash
-ng e2e
-```
+# Frontend (projects/primeng-table/)
+ng serve            # Development server
+ng build            # Production build
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+🌐 URLs
 
-## Additional Resources
+- Backend API: http://localhost:3000
+- Swagger Docs: http://localhost:3000/api/docs
+- Frontend: http://localhost:4200
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+🎯 Ready to Test
+
+Quick Start (Everything in Parallel):
+npm run dev:full     # Starts database, backend, and frontend
+
+Or Manual Start:
+1. Start Backend:
+   cd projects/server
+   npm run start:dev  # (PostgreSQL via Docker needed)
+2. Start Frontend:
+   ng serve primeng-table
+3. Visit: http://localhost:4200 to test the complete API integration!
+
+The application demonstrates full CRUD operations, proper error handling, database relationships, API documentation, and        
+modern frontend integration. Everything is working and ready for testing! 🚀
