@@ -3,10 +3,15 @@
     @let tableData = productsData();
     @if (tableData) {
     <app-table [columns]="pageTableColumns()" [rows]="tableData.products" [loading]="tableDataAsResource.isLoading()"
-      [totalCount]="tableData.total" [withIndex]="true" [(pageNumber)]="pageNumber" [(pageSize)]="pageSize"
-      (sortChange)="sortChange($event);" (filterChange)="filterChange($event);">
+      [totalCount]="tableData.total" [(pageNumber)]="pageNumber" [(pageSize)]="pageSize"
+      (sortChange)="sortChange($event);" (filterChange)="filterChange($event);" [(selectedRows)]="selectedRows">
       <ng-template #pTableRowAction let-row>
         <p-button styleClass="dimensions-40" icon="pi pi-eye" severity="secondary" rounded />
+      </ng-template>
+
+      <ng-template #pTableCaptionAction>
+        <p-button label="Remove All" severity="danger" icon="pi pi-trash" [disabled]="!selectedRows().length"
+          (onClick)="removeAllSelectedRows()" />
       </ng-template>
     </app-table>
     }

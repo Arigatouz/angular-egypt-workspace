@@ -32,6 +32,8 @@ export class Products {
   readonly sort = signal('');
   readonly order = signal('');
 
+  readonly selectedRows = signal<IProduct[]>([]);
+
   pageTableColumns = signal<ITableColumn<IProduct>[]>([
     {
       title: 'Title',
@@ -99,5 +101,9 @@ export class Products {
         this.tableDataAsResource = this.#productsService.getAll(this.tableFilterPayload);
       }
     });
+  }
+
+  removeAllSelectedRows() {
+    this.selectedRows.set([]);
   }
 }
