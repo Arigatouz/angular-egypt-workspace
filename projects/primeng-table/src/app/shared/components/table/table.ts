@@ -29,18 +29,20 @@ import { ITableColumn } from '../../interfaces/table';
   encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent<T> {
-  rows = input.required<T[], T[]>({
-    transform: (rows) => {
-      if (!this.withIndex() || !rows) return rows || [];
+  readonly rows = input.required<T[]>();
 
-      return rows?.map((row, index) => ({
-        ...row,
-        index: this.pageNumber() === 1 ? index + 1 : (this.pageNumber() - 1) * this.pageSize() + (index + 1),
-      }));
-    },
+  readonly computedRows = computed(() => {
+    if (!this.withIndex() || !this.rows()) return this.rows();
+
+    const pageNumber = this.pageNumber() / this.pageSize() + 1;
+
+    return this.rows()?.map((row, index) => ({
+      ...row,
+      index: pageNumber === 1 ? index + 1 : (pageNumber - 1) * this.pageSize() + (index + 1),
+    }));
   });
 
-  columns = input.required<ITableColumn<T>[], ITableColumn<T>[]>({
+  readonly columns = input.required<ITableColumn<T>[], ITableColumn<T>[]>({
     transform: (columns) => {
       if (columns.find((column) => column.rowPropertyName === 'id') || !this.withIndex()) return columns;
 
@@ -54,6 +56,18 @@ export class TableComponent<T> {
     },
   });
 
+  readonly computedColumns = computed(() => {
+    if (this.columns().find((column) => column.rowPropertyName === 'id') || !this.withIndex()) return this.columns();
+
+    return [
+      {
+        title: '#',
+        rowPropertyName: 'index',
+      },
+      ...this.columns(),
+    ];
+  });
+
   readonly withPaginator = input(true);
   readonly rowsPerPageOptions = input<number[]>([10, 25, 50, 100]);
   readonly pageSize = model(10);
@@ -61,6 +75,8 @@ export class TableComponent<T> {
   readonly totalCount = input(0);
   readonly currentPageReportTemplate = input<string>('Showing {first} to {last} of {totalRecords} results');
 
+  readonly withSelection = input(true);
+  readonly selectedRows = model<T[]>([]);
   readonly isLazy = input(true);
   readonly withIndex = input(false);
   readonly loading = input(false);
@@ -72,6 +88,7 @@ export class TableComponent<T> {
   readonly filterChange = output<{ global: string } | null>();
 
   readonly tableActionRef = contentChild('pTableRowAction', { read: TemplateRef });
+  readonly tableCaptionActionRef = contentChild('pTableCaptionAction', { read: TemplateRef });
 
   readonly dt = viewChild(Table);
 
