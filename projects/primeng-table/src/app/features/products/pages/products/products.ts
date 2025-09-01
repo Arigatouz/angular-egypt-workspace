@@ -1,13 +1,14 @@
 import { SortMeta } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { Component, computed, inject, Injector, linkedSignal, runInInjectionContext, signal } from '@angular/core';
+import { Component, computed, inject, Injector, linkedSignal, runInInjectionContext, signal, TemplateRef, viewChild } from '@angular/core';
 
 import { IProduct } from '../../interfaces/product';
 import { ProductsService } from '../../services/products/products';
+import { ProductDescription } from '../../components/product-description/product-description';
 
 import { ITableColumn } from 'src/app/shared/interfaces/table';
-import { IPaginatedResponse } from 'src/app/core/interfaces/response';
 import { TableComponent } from 'src/app/shared/components/table/table';
+import { IPaginatedResponse } from 'src/app/core/interfaces/response';
 
 const sortConfig = {
   '1': 'asc',
@@ -32,18 +33,22 @@ export class Products {
   readonly sort = signal('');
   readonly order = signal('');
 
+  readonly titleCellRef = viewChild<TemplateRef<HTMLElement>>('titleCellRef');
+
   readonly selectedRows = signal<IProduct[]>([]);
 
-  pageTableColumns = signal<ITableColumn<IProduct>[]>([
+  readonly pageTableColumns = signal<ITableColumn<IProduct>[]>([
     {
       title: 'Title',
       rowPropertyName: 'title',
       sortable: true,
+      customCellTemplate: this.titleCellRef,
     },
     {
       title: 'Description',
       rowPropertyName: 'description',
       resizable: true,
+      customCellComponent: ProductDescription,
     },
     {
       title: 'Price',

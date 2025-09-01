@@ -67,8 +67,15 @@
 
         <td [class]="col.customCellClass ? col.customCellClass(rowData) : ''">
           <span class="block truncate">
+            @if(col.customCellTemplate) {
+            <ng-container [ngTemplateOutlet]="col.customCellTemplate()"
+              [ngTemplateOutletContext]="{ $implicit: rowData }" />
+            } @else if(col.customCellComponent) {
+            <ng-container [ngComponentOutlet]="col.customCellComponent" [ngComponentOutletInputs]="{ rowData }" />
+            } @else {
             {{ col.customCellFormatter ? col.customCellFormatter(rowData) : getEachColumnData(rowData,
             col.rowPropertyName) }}
+            }
           </span>
         </td>
         }

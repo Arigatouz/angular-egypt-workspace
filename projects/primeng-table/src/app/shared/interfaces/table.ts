@@ -1,4 +1,7 @@
 // Utility type to build dot-notation nested keys, e.g. "category.name.first"
+
+import { Signal, TemplateRef, Type } from '@angular/core';
+
 /**
  * Represents a utility type `DotNestedKeysOf` that computes a union of all possible
  * dot-separated keys from a nested object type `T`.
@@ -17,8 +20,8 @@
  */
 type DotNestedKeysOf<T> = T extends object
   ? {
-    [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
-  }[keyof T & string]
+      [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
+    }[keyof T & string]
   : never;
 
 /**
@@ -97,4 +100,7 @@ export interface ITableColumn<T> {
   resizable?: boolean;
   customCellClass?(row: T): string;
   customCellFormatter?(row: T): string;
+  customCellTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
+  customCellComponent?: Type<unknown>;
+  customCellComponentInput?: 'rowData';
 }
