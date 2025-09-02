@@ -15,14 +15,14 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { NgTemplateOutlet } from '@angular/common';
+import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { Table, TableFilterEvent, TableModule, TablePageEvent } from 'primeng/table';
 
 import { ITableColumn } from '../../interfaces/table';
 
 @Component({
   selector: 'app-table',
-  imports: [TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, NgTemplateOutlet],
+  imports: [TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, NgTemplateOutlet, NgComponentOutlet],
   templateUrl: './table.html',
   styleUrl: './table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,7 @@
 // Utility type to build dot-notation nested keys, e.g. "category.name.first"
+
+import { Signal, TemplateRef, Type } from '@angular/core';
+
 /**
  * Represents a utility type `DotNestedKeysOf` that computes a union of all possible
  * dot-separated keys from a nested object type `T`.
@@ -17,19 +20,19 @@
  */
 type DotNestedKeysOf<T> = T extends object
   ? {
-    [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
-  }[keyof T & string]
+      [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
+    }[keyof T & string]
   : never;
 
 /**
  * Interface representing a table column configuration.
  *
  * This interface provides a flexible and type-safe way to define how data should be
- * displayed, sorted, and formatted within table columns. It leverages TypeScript's
- * type system to ensure compile-time validation of property paths and provide
- * IntelliSense support for nested property access.
+ * displayed, sorted, styled, and formatted within table columns. It leverages
+ * TypeScript's type system to ensure compile-time validation of property paths and
+ * provides IntelliSense support for nested property access.
  *
- * @template T - The type of the row data object. This ensures type safety when
+ * @template T - The type of the row data object. Ensures type safety when
  *               accessing nested properties and provides IntelliSense support.
  *
  * @example
@@ -68,6 +71,26 @@ type DotNestedKeysOf<T> = T extends object
  * ```
  *
  * @example
+ * Using a custom template:
+ * ```typescript
+ * {
+ *   title: 'Status',
+ *   rowPropertyName: 'status',
+ *   customCellTemplate: someStatusTemplateSignal
+ * }
+ * ```
+ *
+ * @example
+ * Using a custom component:
+ * ```typescript
+ * {
+ *   title: 'Actions',
+ *   rowPropertyName: 'action',
+ *   customCellComponent: ActionButtonsComponent
+ * }
+ * ```
+ *
+ * @example
  * Special columns:
  * ```typescript
  * // Index column - shows row numbers
@@ -89,6 +112,9 @@ type DotNestedKeysOf<T> = T extends object
  *   Receives the row data as parameter and should return a string of CSS class names.
  * - `customCellFormatter?` - **Optional.** Function to format the cell value for display. The original data remains
  *   unchanged; only the display value is modified. Receives the row data as parameter and should return a formatted string.
+ * - `customCellTemplate?` - **Optional.** Angular `TemplateRef` wrapped in a `Signal`, used to fully control the rendering
+ *   of the cell content.
+ * - `customCellComponent?` - **Optional.** Angular component type used for rendering custom, interactive, or dynamic content.
  */
 export interface ITableColumn<T> {
   title: string;
@@ -97,4 +123,6 @@ export interface ITableColumn<T> {
   resizable?: boolean;
   customCellClass?(row: T): string;
   customCellFormatter?(row: T): string;
+  customCellTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
+  customCellComponent?: Type<unknown>;
 }

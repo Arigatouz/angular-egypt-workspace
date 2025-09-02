@@ -56,19 +56,26 @@
       </tr>
     </ng-template>
 
-    <ng-template #body let-rowData let-columns="columns">
+    <ng-template #body let-row let-columns="columns">
       <tr>
         @for (col of columns; track $index) {
         @if ($first && withSelection()) {
         <td>
-          <p-tableCheckbox [value]="rowData" />
+          <p-tableCheckbox [value]="row" />
         </td>
         }
 
-        <td [class]="col.customCellClass ? col.customCellClass(rowData) : ''">
+        <td [class]="col.customCellClass ? col.customCellClass(row) : ''">
           <span class="block truncate">
-            {{ col.customCellFormatter ? col.customCellFormatter(rowData) : getEachColumnData(rowData,
+            @if(col.customCellTemplate) {
+            <ng-container [ngTemplateOutlet]="col.customCellTemplate()"
+              [ngTemplateOutletContext]="{ $implicit: row }" />
+            } @else if(col.customCellComponent) {
+            <ng-container [ngComponentOutlet]="col.customCellComponent" [ngComponentOutletInputs]="{ row }" />
+            } @else {
+            {{ col.customCellFormatter ? col.customCellFormatter(row) : getEachColumnData(row,
             col.rowPropertyName) }}
+            }
           </span>
         </td>
         }
@@ -77,7 +84,7 @@
         @if(tableActionRef()) {
         <td>
           <div class="flex items-center gap-2">
-            <ng-container [ngTemplateOutlet]="tableActionRef()" [ngTemplateOutletContext]="{ $implicit: rowData }" />
+            <ng-container [ngTemplateOutlet]="tableActionRef()" [ngTemplateOutletContext]="{ $implicit: row }" />
           </div>
         </td>
         }
