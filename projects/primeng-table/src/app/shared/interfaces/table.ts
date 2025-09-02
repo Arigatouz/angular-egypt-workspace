@@ -102,5 +102,4 @@ export interface ITableColumn<T> {
   customCellFormatter?(row: T): string;
   customCellTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
   customCellComponent?: Type<unknown>;
-  customCellComponentInput?: 'rowData';
 }

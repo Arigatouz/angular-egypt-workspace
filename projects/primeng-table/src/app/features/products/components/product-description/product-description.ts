@@ -8,5 +8,5 @@ import { IProduct } from '../../interfaces/product';
   styleUrl: './product-description.scss',
 })
 export class ProductDescription {
-  rowData = input.required<IProduct>();
+  row = input.required<IProduct>();
 }
