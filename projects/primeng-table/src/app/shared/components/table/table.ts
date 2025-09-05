@@ -12,9 +12,11 @@ import {
 } from '@angular/core';
 import { SortMeta } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import { Table, TableFilterEvent, TableModule, TablePageEvent } from 'primeng/table';
 
@@ -22,7 +24,17 @@ import { ITableColumn } from '../../interfaces/table';
 
 @Component({
   selector: 'app-table',
-  imports: [TableModule, ButtonModule, InputTextModule, IconFieldModule, InputIconModule, NgTemplateOutlet, NgComponentOutlet],
+  imports: [
+    TableModule,
+    ButtonModule,
+    SelectModule,
+    InputTextModule,
+    IconFieldModule,
+    InputIconModule,
+    NgTemplateOutlet,
+    MultiSelectModule,
+    NgComponentOutlet,
+  ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,6 +80,8 @@ export class TableComponent<T> {
     ];
   });
 
+  readonly isFilterable = computed(() => this.columns().some((column) => column.filterable));
+
   readonly withPaginator = input(true);
   readonly rowsPerPageOptions = input<number[]>([10, 25, 50, 100]);
   readonly pageSize = model(10);
@@ -85,7 +99,7 @@ export class TableComponent<T> {
   readonly globalFilterFields = computed(() => this.columns().map((column) => column.rowPropertyName));
 
   readonly sortChange = output<SortMeta[] | SortMeta>();
-  readonly filterChange = output<{ global: string } | null>();
+  readonly filterChange = output<Record<string, unknown> | null>();
 
   readonly tableActionRef = contentChild('pTableRowAction', { read: TemplateRef });
   readonly tableCaptionActionRef = contentChild('pTableCaptionAction', { read: TemplateRef });
@@ -122,15 +136,19 @@ export class TableComponent<T> {
     const filterValue = event.filters;
     if (!filterValue) return;
 
-    if (!Object.keys(filterValue).length) {
+    const filterPayload: Record<string, unknown> = {};
+    Object.entries(filterValue).forEach(([key, eachFilterValue]) => {
+      if (!eachFilterValue || !eachFilterValue.value || (Array.isArray(eachFilterValue.value) && !eachFilterValue.value.length)) return;
+
+      filterPayload[key] = eachFilterValue.value;
+    });
+
+    if (!Object.keys(filterPayload).length) {
       this.filterChange.emit(null);
       return;
     }
 
-    if ('global' in filterValue) {
-      const globalFilterValue = filterValue?.['global']?.value;
-      this.filterChange.emit({ global: globalFilterValue });
-    }
+    this.filterChange.emit(filterPayload);
   }
 
   /**

@@ -34,8 +34,11 @@ export class Products {
   readonly order = signal('');
 
   readonly titleCellRef = viewChild<TemplateRef<HTMLElement>>('titleCellRef');
+  readonly filterOptionRef = viewChild<TemplateRef<HTMLElement>>('filterOptionRef');
 
   readonly selectedRows = signal<IProduct[]>([]);
+
+  readonly #productCategories = this.#productsService.getAllProductCategories();
 
   readonly pageTableColumns = signal<ITableColumn<IProduct>[]>([
     {
@@ -43,6 +46,8 @@ export class Products {
       rowPropertyName: 'title',
       sortable: true,
       customCellTemplate: this.titleCellRef,
+      filterable: true,
+      filterType: 'text',
     },
     {
       title: 'Description',
@@ -61,6 +66,17 @@ export class Products {
     {
       title: 'Category',
       rowPropertyName: 'category',
+      filterable: true,
+      filterType: 'select',
+      filterOptionTemplate: this.filterOptionRef,
+      filterOptions: linkedSignal({
+        source: () => this.#productCategories.value(),
+        computation: (newVal) => {
+          if (!newVal || !newVal.length) return [];
+
+          return newVal.map((category) => ({ id: category, label: category }));
+        },
+      }),
     },
   ]);
 
@@ -94,11 +110,16 @@ export class Products {
     }
   }
 
-  filterChange(event: { global: string } | null) {
+  filterChange(event: Record<string, unknown> | null) {
+    console.log(event);
+
     runInInjectionContext(this.#injector, () => {
-      if (event) {
+      if (event && event['global']) {
         this.tableDataAsResource.destroy();
-        this.tableDataAsResource = this.#productsService.search(signal({ q: event.global }));
+        this.tableDataAsResource = this.#productsService.search(signal({ q: event['global'] as string }));
+      } else if (event && event['category']) {
+        this.tableDataAsResource.destroy();
+        this.tableDataAsResource = this.#productsService.getProductsByCategory((event['category'] as { id: string; label: string })['id']);
       } else {
         this.pageSize.set(10);
         this.pageNumber.set(0);
