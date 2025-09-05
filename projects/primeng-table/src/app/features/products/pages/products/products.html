@@ -18,6 +18,8 @@
   </div>
 </div>
 
-<ng-template #titleCellRef let-row>
-  {{ row.title }} - ({{ row.stock }}) item/s
+<ng-template #titleCellRef let-row> {{ row.title }} - ({{ row.stock }}) item/s </ng-template>
+
+<ng-template #filterOptionRef let-option>
+  <span class="capitalize">{{ option.label }}</span>
 </ng-template>

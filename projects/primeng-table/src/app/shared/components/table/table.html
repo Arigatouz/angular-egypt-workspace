@@ -54,6 +54,62 @@
         </th>
         }
       </tr>
+
+      @if (isFilterable()) {
+      <tr>
+        <th></th>
+
+        @for (col of columns; track $index) {
+        @if (col.filterable) {
+        <th>
+          @switch(col.filterType) {
+          @case('text') {
+          <p-columnFilter [field]="col.rowPropertyName" [showMenu]="false" class="min-width" ariaLabel="Filter Name">
+            <ng-template #filter>
+              <input pInputText type="text"
+                (input)="dt.filter($any($event.target)?.value, col.rowPropertyName, 'contains')"
+                placeholder="Type to search" />
+            </ng-template>
+          </p-columnFilter>
+          }
+          @case('select') {
+          <p-columnFilter [field]="col.rowPropertyName" matchMode="equals" [showMenu]="false">
+            <ng-template #filter let-filter="filterCallback">
+              <p-select [options]="col.filterOptions()" (onChange)="filter($event.value)" class="min-width"
+                placeholder="Select {{ col.title }}" [showClear]="true" optionLabel="label" appendTo="body">
+                <ng-template let-option #item>
+                  @if (col.filterOptionTemplate) {
+                  <ng-container [ngTemplateOutlet]="col.filterOptionTemplate()"
+                    [ngTemplateOutletContext]="{ $implicit: option }" />
+                  } @else {
+                  <span class="capitalize">{{ option.label }}</span>
+                  }
+                </ng-template>
+              </p-select>
+            </ng-template>
+          </p-columnFilter>
+          }
+          @default {
+          @if (col.filterCellTemplate) {
+          <p-columnFilter [field]="col.rowPropertyName" [showMenu]="false" class="min-width" ariaLabel="Filter Name">
+            <ng-template #filter let-filter="filterCallback">
+              <ng-container [ngTemplateOutlet]="col.filterCellTemplate()" [ngTemplateOutletContext]="{ dt, filter }" />
+            </ng-template>
+          </p-columnFilter>
+          }
+          }
+          }
+        </th>
+        } @else {
+        <th></th>
+        }
+        }
+
+        @if(tableActionRef()) {
+        <th></th>
+        }
+      </tr>
+      }
     </ng-template>
 
     <ng-template #body let-row let-columns="columns">

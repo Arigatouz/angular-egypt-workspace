@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 interface IRequest {
   url: HttpResourceRequest['url'];
-  params: Signal<HttpResourceRequest['params']>;
+  params?: Signal<HttpResourceRequest['params']>;
 }
 
 @Injectable({
@@ -17,7 +17,7 @@ export class HttpService {
   get<T>(request: IRequest) {
     return httpResource<T>(() => ({
       url: `${this.#baseUrl}${request.url}`,
-      params: request.params(),
+      params: request.params && request.params(),
     }));
   }
 }

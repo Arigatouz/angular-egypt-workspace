@@ -25,6 +25,18 @@ export class ProductsService {
     });
   }
 
+  getAllProductCategories() {
+    return this.#httpService.get<string[]>({
+      url: `${this.#config.url}/category-list`,
+    });
+  }
+
+  getProductsByCategory(category: string) {
+    return this.#httpService.get<IPaginatedResponse<IProduct[]>>({
+      url: `${this.#config.url}/category/${category}`,
+    });
+  }
+
   search(params: Signal<HttpResourceRequest['params']>) {
     return this.#httpService.get<IPaginatedResponse<IProduct[]>>({
       url: `${this.#config.url}/search`,

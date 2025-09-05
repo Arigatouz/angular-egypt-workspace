@@ -2,6 +2,8 @@
 
 import { Signal, TemplateRef, Type } from '@angular/core';
 
+import { ISelectOption } from './select-option';
+
 /**
  * Represents a utility type `DotNestedKeysOf` that computes a union of all possible
  * dot-separated keys from a nested object type `T`.
@@ -20,8 +22,8 @@ import { Signal, TemplateRef, Type } from '@angular/core';
  */
 type DotNestedKeysOf<T> = T extends object
   ? {
-      [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
-    }[keyof T & string]
+    [P in keyof T & string]: T[P] extends object ? `${P}.${DotNestedKeysOf<T[P]>}` : `${P}`;
+  }[keyof T & string]
   : never;
 
 /**
@@ -116,7 +118,27 @@ type DotNestedKeysOf<T> = T extends object
  *   of the cell content.
  * - `customCellComponent?` - **Optional.** Angular component type used for rendering custom, interactive, or dynamic content.
  */
-export interface ITableColumn<T> {
+
+interface ITableColumnFilterTextType {
+  filterType: 'text' | 'custom';
+}
+
+interface ITableColumnFilterMultiSelectType {
+  filterType: 'select';
+  filterOptions: Signal<ISelectOption[]>;
+  filterOptionTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
+}
+
+type ITableColumnFilterable =
+  | ({
+    filterable: true;
+    filterCellTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
+  } & (ITableColumnFilterTextType | ITableColumnFilterMultiSelectType))
+  | {
+    filterable?: false;
+  };
+
+export type ITableColumn<T> = {
   title: string;
   rowPropertyName: DotNestedKeysOf<T> | 'index' | 'action';
   sortable?: boolean;
@@ -125,4 +147,4 @@ export interface ITableColumn<T> {
   customCellFormatter?(row: T): string;
   customCellTemplate?: Signal<TemplateRef<HTMLElement> | undefined>;
   customCellComponent?: Type<unknown>;
-}
+} & ITableColumnFilterable;
