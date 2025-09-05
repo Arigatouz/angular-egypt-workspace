@@ -7,6 +7,7 @@ import { ProductsService } from '../../services/products/products';
 import { ProductDescription } from '../../components/product-description/product-description';
 
 import { ITableColumn } from 'src/app/shared/interfaces/table';
+import { ISelectOption } from 'src/app/shared/interfaces/select-option';
 import { TableComponent } from 'src/app/shared/components/table/table';
 import { IPaginatedResponse } from 'src/app/core/interfaces/response';
 
@@ -71,10 +72,10 @@ export class Products {
       filterOptionTemplate: this.filterOptionRef,
       filterOptions: linkedSignal({
         source: () => this.#productCategories.value(),
-        computation: (newVal) => {
-          if (!newVal || !newVal.length) return [];
+        computation: (categories) => {
+          if (!categories || !categories.length) return [];
 
-          return newVal.map((category) => ({ id: category, label: category }));
+          return categories.map((category) => ({ id: category, label: category }));
         },
       }),
     },
@@ -119,7 +120,7 @@ export class Products {
         this.tableDataAsResource = this.#productsService.search(signal({ q: event['global'] as string }));
       } else if (event && event['category']) {
         this.tableDataAsResource.destroy();
-        this.tableDataAsResource = this.#productsService.getProductsByCategory((event['category'] as { id: string; label: string })['id']);
+        this.tableDataAsResource = this.#productsService.getProductsByCategory((event['category'] as ISelectOption)['id']);
       } else {
         this.pageSize.set(10);
         this.pageNumber.set(0);
