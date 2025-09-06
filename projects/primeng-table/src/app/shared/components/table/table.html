@@ -93,7 +93,7 @@
           @if (col.filterCellTemplate) {
           <p-columnFilter [field]="col.rowPropertyName" [showMenu]="false" class="min-width" ariaLabel="Filter Name">
             <ng-template #filter let-filter="filterCallback">
-              <ng-container [ngTemplateOutlet]="col.filterCellTemplate()" [ngTemplateOutletContext]="{ dt, filter }" />
+              <ng-container [ngTemplateOutlet]="col.filterCellTemplate()" [ngTemplateOutletContext]="{ dt, col, filter }" />
             </ng-template>
           </p-columnFilter>
           }
