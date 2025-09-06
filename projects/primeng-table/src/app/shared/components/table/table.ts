@@ -85,7 +85,7 @@ export class TableComponent<T> {
   readonly withPaginator = input(true);
   readonly rowsPerPageOptions = input<number[]>([10, 25, 50, 100]);
   readonly pageSize = model(10);
-  readonly pageNumber = model(1);
+  readonly pageNumber = model(0);
   readonly totalCount = input(0);
   readonly currentPageReportTemplate = input<string>('Showing {first} to {last} of {totalRecords} results');
 

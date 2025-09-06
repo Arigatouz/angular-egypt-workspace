@@ -140,7 +140,7 @@ type ITableColumnFilterable =
 
 export type ITableColumn<T> = {
   title: string;
-  rowPropertyName: DotNestedKeysOf<T> | 'index' | 'action';
+  rowPropertyName: DotNestedKeysOf<T> | 'index';
   sortable?: boolean;
   resizable?: boolean;
   customCellClass?(row: T): string;
