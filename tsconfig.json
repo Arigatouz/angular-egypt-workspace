@@ -29,6 +29,12 @@
     },
     {
       "path": "./projects/primeng-table/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/angular-firebase/tsconfig.app.json"
+    },
+    {
+      "path": "./projects/angular-firebase/tsconfig.spec.json"
     }
   ]
 }
